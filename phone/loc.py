@@ -16,6 +16,8 @@ while not sec:
     except:
         sec=0
 cnt=0
+orgLat=0.0
+orgLon=0.0
 try:
     while True:
         txdat=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -26,11 +28,14 @@ try:
         while not loc:
         	loc=location.get_location()
         #location.stop_updates()
-        cursor.execute(
-            "insert into loc(batid, latitude, longitude, altitude, timestamp, horizontal_accuracy, vertical_accuracy, speed, cuorse, txdat) values(?,?,?,?,?,?,?,?,?,?)",
-            (batid,loc['latitude'],loc['longitude'],loc['altitude'],loc['timestamp'],loc['horizontal_accuracy'],loc['vertical_accuracy'],loc['speed'],loc['course'],txdat)
-        )
-        conn.commit()
+        if orgLat!=loc['latitude'] or orgLon!=loc['longitude']:
+            cursor.execute(
+                "insert into loc(batid, latitude, longitude, altitude, timestamp, horizontal_accuracy, vertical_accuracy, speed, cuorse, txdat) values(?,?,?,?,?,?,?,?,?,?)",
+                (batid,loc['latitude'],loc['longitude'],loc['altitude'],loc['timestamp'],loc['horizontal_accuracy'],loc['vertical_accuracy'],loc['speed'],loc['course'],txdat)
+            )
+            conn.commit()
+            orgLat=loc['latitude']
+            orgLon=loc['longitude']
         time.sleep(sec)
 finally:
         cursor.close()

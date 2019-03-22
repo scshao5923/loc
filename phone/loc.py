@@ -23,11 +23,11 @@ try:
         txdat=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         cnt=cnt+1
         print(cnt)
-        #location.start_updates()
+        location.start_updates()
         loc=location.get_location()
         while not loc:
         	loc=location.get_location()
-        #location.stop_updates()
+        location.stop_updates()
         if orgLat!=loc['latitude'] or orgLon!=loc['longitude']:
             cursor.execute(
                 "insert into loc(batid, latitude, longitude, altitude, timestamp, horizontal_accuracy, vertical_accuracy, speed, cuorse, txdat) values(?,?,?,?,?,?,?,?,?,?)",
